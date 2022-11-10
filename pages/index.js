@@ -1,8 +1,16 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+export default function Home({ data }) {
+  const [time, setTime] = useState(null);
+  
+  useEffect(() => {
+    fetch('/api/time')
+      .then(res => res.json())
+      .then(json => setTime(new Date(json.time)));
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,8 +21,10 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Landing page (pages/index.js)
         </h1>
+        <h2>Current time is {time &&
+          `The time is ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`}</h2>
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -55,16 +65,7 @@ export default function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
+        <a href="https://nextjs.org">Created with Next.js</a>
       </footer>
     </div>
   )
